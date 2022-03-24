@@ -30,8 +30,8 @@ class StructuralAttentionLayer(nn.Module):
         self.act = nn.ELU()
 
         self.lin = nn.Linear(input_dim, n_heads * self.out_dim, bias=False)
-        self.att_l = nn.Parameter(torch.Tensor(1, n_heads, self.out_dim))
-        self.att_r = nn.Parameter(torch.Tensor(1, n_heads, self.out_dim))
+        self.att_l = nn.Parameter(torch.zeros(1, n_heads, self.out_dim))
+        self.att_r = nn.Parameter(torch.zeros(1, n_heads, self.out_dim))
         
         self.leaky_relu = nn.LeakyReLU(negative_slope=0.2)
 
