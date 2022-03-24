@@ -19,6 +19,7 @@ from utils.minibatch import  MyDataset
 from utils.utilities import to_device
 from eval.link_prediction import evaluate_classifier
 from models.model import DySAT
+from eval.plotter import plotter
 
 import torch
 torch.autograd.set_detect_anomaly(True)
@@ -134,6 +135,10 @@ if __name__ == "__main__":
     # in training
     best_epoch_val = 0
     patient = 0
+    epoch_num = []
+    all_loss = []
+    all_auc_val = []
+    all_auc_test = []
     for epoch in range(args.epochs):
         model.train()
         epoch_loss = []
@@ -171,6 +176,13 @@ if __name__ == "__main__":
                                                                 np.mean(epoch_loss),
                                                                 epoch_auc_val, 
                                                                 epoch_auc_test))
+        epoch_num.append(epoch)
+        all_loss.append(np.mean(epoch_loss))
+        all_auc_val.append(epoch_auc_val)
+        all_auc_test.append(epoch_auc_test)
+
+    # Plot the Result
+    plotter(epoch_num, all_loss, all_auc_val, all_auc_test)
     # Test Best Model
     model.load_state_dict(torch.load("./model_checkpoints/model.pt"))
     model.eval()
